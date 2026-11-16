@@ -29,7 +29,7 @@ jobs:
       name: production
       url: https://gta6-countdown-rho.vercel.app
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Wait for Vercel deployment
         env:
@@ -84,14 +84,14 @@ jobs:
     env:
       BASE_URL: https://gta6-countdown-rho.vercel.app
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
@@ -99,7 +99,7 @@ jobs:
       - run: npx playwright test --project=${{ matrix.project }}
       - name: Upload test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: prod-report-${{ matrix.project }}
           path: |
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5 # LHCI reads the commit hash when uploading the report
+      - uses: actions/checkout@v7 # LHCI reads the commit hash when uploading the report
       # An explicit config stops LHCI from auto-loading lighthouserc.json (which serves the local folder)
       - name: Audit
         id: lhci
