@@ -113,6 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v5 # LHCI reads the commit hash when uploading the report
       - name: Audit
         id: lhci
         uses: treosh/lighthouse-ci-action@v12
