@@ -1,0 +1,14 @@
+# Only the site itself gets deployed; keep dev tooling out of production.
+.github
+docs
+tests
+node_modules
+test-results
+playwright-report
+.lighthouseci
+package.json
+package-lock.json
+playwright.config.js
+lighthouserc.json
+.htmlvalidate.json
+README.md

@@ -1,0 +1,18 @@
+{
+  "name": "gta6-countdown",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fan-made GTA VI countdown to the US PS5 unlock",
+  "scripts": {
+    "start": "serve -l 4173 --no-clipboard .",
+    "lint": "html-validate index.html",
+    "test": "playwright test",
+    "test:prod": "cross-env BASE_URL=https://gta6-countdown-rho.vercel.app playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "cross-env": "^10.1.0",
+    "html-validate": "^10.9.0",
+    "serve": "^14.2.8"
+  }
+}

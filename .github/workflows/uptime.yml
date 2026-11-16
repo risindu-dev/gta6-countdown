@@ -1,0 +1,72 @@
+name: Uptime
+
+# Pings production every 15 minutes. If it's down, opens a GitHub issue
+# (labelled "outage") so you get notified; closes it again on recovery.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  PROD_URL: https://gta6-countdown-rho.vercel.app
+
+jobs:
+  ping:
+    name: Ping production
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check site
+        id: ping
+        run: |
+          code=$(curl -s -o page.html -w '%{http_code}' --max-time 20 \
+            --retry 3 --retry-delay 15 --retry-all-errors "$PROD_URL") || true
+          echo "HTTP $code"
+          if [ "$code" = 200 ] && grep -q '<title>GTA VI Countdown</title>' page.html; then
+            echo "up=true" >> "$GITHUB_OUTPUT"
+            echo "### 🟢 Up · HTTP $code" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "up=false" >> "$GITHUB_OUTPUT"
+            echo "code=$code" >> "$GITHUB_OUTPUT"
+            echo "### 🔴 Down · HTTP $code" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Open outage issue
+        if: steps.ping.outputs.up == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          CODE: ${{ steps.ping.outputs.code }}
+        run: |
+          if [ "$(gh issue list --label outage --state open --json number --jq length)" = 0 ]; then
+            gh label create outage --color B60205 --description "Production site is down" 2>/dev/null || true
+            gh issue create --label outage \
+              --title "🚨 Production is down" \
+              --body "Uptime check failed at $(date -u '+%Y-%m-%d %H:%M UTC').
+
+          - URL: $PROD_URL
+          - Response: HTTP ${CODE:-no response}
+          - Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+          This issue closes automatically when the site is back up."
+          fi
+          exit 1
+
+      - name: Close outage issue
+        if: steps.ping.outputs.up == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for n in $(gh issue list --label outage --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "✅ Back up: HTTP 200 at $(date -u '+%Y-%m-%d %H:%M UTC')."
+          done

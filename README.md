@@ -19,11 +19,19 @@ Sunset skyline, original synthwave soundtrack, and a broadcast-ready stream mode
 ![Web Audio](https://img.shields.io/badge/Web_Audio-generated_soundtrack-7b2cff?style=flat-square)
 ![Build](https://img.shields.io/badge/build_step-none-3ee0ff?style=flat-square)
 
+[![CI](https://github.com/risindu-dev/gta6-countdown/actions/workflows/ci.yml/badge.svg)](https://github.com/risindu-dev/gta6-countdown/actions/workflows/ci.yml)
+[![CD](https://github.com/risindu-dev/gta6-countdown/actions/workflows/cd.yml/badge.svg)](https://github.com/risindu-dev/gta6-countdown/actions/workflows/cd.yml)
+[![Uptime](https://github.com/risindu-dev/gta6-countdown/actions/workflows/uptime.yml/badge.svg)](https://github.com/risindu-dev/gta6-countdown/actions/workflows/uptime.yml)
+
+<br>
+
+### [▶ Live demo: gta6-countdown-rho.vercel.app](https://gta6-countdown-rho.vercel.app)
+
 <br>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/risindu-dev/gta6-countdown)
 
-[**Features**](#-features) · [**Unlock times**](#-unlock-times) · [**Deploy**](#-deploy-on-vercel) · [**Go live on YouTube**](#-go-live-on-youtube) · [**Customize**](#-customize)
+[**Features**](#-features) · [**Unlock times**](#-unlock-times) · [**Deploy**](#-deploy-on-vercel) · [**Go live on YouTube**](#-go-live-on-youtube) · [**CI/CD**](#-cicd) · [**Customize**](#-customize)
 
 </div>
 
@@ -120,10 +128,14 @@ GTA VI unlocks on the US PlayStation Store at **05:00 UTC on Thursday, November 
 
 ## 🚀 Run it locally
 
-There's nothing to install. Open `index.html` in any modern browser, or serve the folder:
+There's nothing to install to *view* it. Open `index.html` in any modern browser. For development:
 
 ```bash
-npx serve .
+npm install
+npm start            # serve at http://localhost:4173
+npm run lint         # validate HTML
+npm test             # Playwright suite, desktop + mobile
+npm run test:prod    # same suite against the live site
 ```
 
 <br>
@@ -176,6 +188,35 @@ Stream mode also hides the "your local time" line, so viewers don't see the stre
 
 <br>
 
+## 🔁 CI/CD
+
+Every change is validated, deployed, then re-tested against the live site.
+
+```mermaid
+flowchart LR
+    P["📤 Push / PR"] --> V["✅ Validate HTML"]
+    V --> E["🎭 E2E tests<br/>desktop + mobile"]
+    V --> L["🔦 Lighthouse"]
+    P -- "main only" --> D["▲ Vercel deploy"]
+    D --> H["🔐 Verify live build<br/>matches commit"]
+    H --> S["🎭 Smoke tests<br/>on production"]
+    H --> LP["🔦 Lighthouse<br/>on production"]
+    U["⏰ Every 15 min"] --> M["📡 Uptime check"] -. "down" .-> I["🚨 Outage issue"]
+```
+
+| Workflow | Runs on | What it does |
+| :-- | :-- | :-- |
+| [**CI**](.github/workflows/ci.yml) | every push & pull request | HTML validation → Playwright end-to-end tests on desktop and mobile Chrome → Lighthouse audit with a report link in the run summary |
+| [**CD**](.github/workflows/cd.yml) | push to `main` | Waits for Vercel to finish deploying, verifies production serves the **exact** `index.html` from the commit (SHA-256), then runs the full test suite and Lighthouse against the live URL |
+| [**Uptime**](.github/workflows/uptime.yml) | every 15 minutes | Pings production; opens an `outage` issue if it's down (so GitHub notifies you) and closes it when it recovers |
+| [**Dependabot**](.github/dependabot.yml) | weekly | Keeps GitHub Actions and dev tools up to date |
+
+**What the tests cover:** exact countdown values on a frozen clock, second-by-second ticking, the final-24-hours glow, the switch to **OUT NOW** at unlock, all six US time zones, visitor time-zone detection (Los Angeles vs. Tokyo), music toggle, `.ics` export contents, `?stream` mode, and no horizontal scroll on mobile.
+
+Deployment itself is handled by Vercel's Git integration: pushes to `main` go to production, and pull requests get preview URLs. `.vercelignore` keeps tests and tooling out of the deployed site.
+
+<br>
+
 ## 🎨 Customize
 
 | What | How |
@@ -207,9 +248,17 @@ All voices are oscillators and filtered noise, with no samples, so there's nothi
 
 ```
 gta6-countdown/
-├── index.html      ← the whole site: markup, styles, artwork, music, logic
-├── README.md
-└── docs/           ← screenshots for this README
+├── index.html              ← the whole site: markup, styles, artwork, music, logic
+├── vercel.json             ← security headers
+├── .vercelignore           ← deploy only the site, not the tooling
+├── tests/
+│   └── countdown.spec.js   ← Playwright end-to-end suite
+├── playwright.config.js
+├── lighthouserc.json
+├── .github/
+│   ├── workflows/          ← ci.yml · cd.yml · uptime.yml
+│   └── dependabot.yml
+└── docs/                   ← screenshots for this README
 ```
 
 <br>

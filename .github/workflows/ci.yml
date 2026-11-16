@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate HTML
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  e2e:
+    name: E2E · ${{ matrix.project }}
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=${{ matrix.project }}
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Audit
+        id: lhci
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+      - name: Summary
+        if: always()
+        env:
+          LINKS: ${{ steps.lhci.outputs.links }}
+          MANIFEST: ${{ steps.lhci.outputs.manifest }}
+        run: |
+          {
+            echo "### 🔦 Lighthouse"
+            echo "| Performance | Accessibility | Best practices | SEO |"
+            echo "| :-: | :-: | :-: | :-: |"
+            echo "$MANIFEST" | jq -r '.[0].summary | "| \((.performance*100)|round) | \((.accessibility*100)|round) | \((."best-practices"*100)|round) | \((.seo*100)|round) |"'
+            echo
+            echo "$LINKS" | jq -r 'to_entries[] | "[Full report](\(.value))"'
+          } >> "$GITHUB_STEP_SUMMARY" || true

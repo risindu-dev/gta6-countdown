@@ -1,0 +1,135 @@
+name: CD
+
+# Vercel's Git integration builds and deploys every push to main.
+# This workflow waits for that deployment, proves production is serving
+# the exact commit, then runs the full test suite against the live site.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  statuses: read
+
+env:
+  PROD_URL: https://gta6-countdown-rho.vercel.app
+
+jobs:
+  deploy:
+    name: Deploy · production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://gta6-countdown-rho.vercel.app
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Wait for Vercel deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 60); do
+            state=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/status" \
+              --jq '[.statuses[] | select(.context == "Vercel")][0].state // "waiting"')
+            echo "[$i/60] Vercel: $state"
+            case "$state" in
+              success) exit 0 ;;
+              failure|error) echo "::error::Vercel deployment failed. Check the Vercel dashboard."; exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "::error::Timed out waiting for Vercel to deploy $GITHUB_SHA"
+          exit 1
+
+      - name: Verify production serves this commit
+        run: |
+          want=$(sha256sum index.html | cut -d' ' -f1)
+          for i in $(seq 1 30); do
+            got=$(curl -fsSL "$PROD_URL/?v=$GITHUB_SHA" | sha256sum | cut -d' ' -f1) || true
+            if [ "$got" = "$want" ]; then
+              echo "✅ $PROD_URL is serving ${GITHUB_SHA::7}"
+              echo "### ✅ Live: [$PROD_URL]($PROD_URL) · \`${GITHUB_SHA::7}\`" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "[$i/30] waiting for the edge cache to update…"
+            sleep 10
+          done
+          echo "::error::Production index.html does not match this commit"
+          exit 1
+
+      - name: Check dev files are not published
+        run: |
+          for p in package.json playwright.config.js tests/countdown.spec.js; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$PROD_URL/$p")
+            echo "/$p → HTTP $code"
+            [ "$code" = 404 ] || echo "::warning::/$p is publicly served. Check .vercelignore."
+          done
+
+  smoke:
+    name: Smoke · ${{ matrix.project }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile]
+    env:
+      BASE_URL: https://gta6-countdown-rho.vercel.app
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=${{ matrix.project }}
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse · production
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Audit
+        id: lhci
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: ${{ env.PROD_URL }}
+          temporaryPublicStorage: true
+      - name: Summary
+        if: always()
+        env:
+          LINKS: ${{ steps.lhci.outputs.links }}
+          MANIFEST: ${{ steps.lhci.outputs.manifest }}
+        run: |
+          {
+            echo "### 🔦 Lighthouse · production"
+            echo "| Performance | Accessibility | Best practices | SEO |"
+            echo "| :-: | :-: | :-: | :-: |"
+            echo "$MANIFEST" | jq -r '.[0].summary | "| \((.performance*100)|round) | \((.accessibility*100)|round) | \((."best-practices"*100)|round) | \((.seo*100)|round) |"'
+            echo
+            echo "$LINKS" | jq -r 'to_entries[] | "[Full report](\(.value))"'
+          } >> "$GITHUB_STEP_SUMMARY" || true
