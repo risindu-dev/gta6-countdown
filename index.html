@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GTA VI Countdown</title>
+<meta name="description" content="Fan-made countdown to GTA VI unlocking on US PlayStation 5 accounts — Nov 19, 2026.">
+<meta name="theme-color" content="#1a0730">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff2f86'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%231a0730'/%3E%3Ctext x='32' y='46' font-family='Impact,sans-serif' font-size='38' text-anchor='middle' fill='url(%23g)'%3EVI%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff3ea5; --hot:#ff2f86; --orange:#ff9f43; --sun:#ffd36b; --cyan:#3ee0ff; --violet:#7b2cff;
+    --ink:#fff; --muted:rgba(255,255,255,.72); --line:rgba(255,255,255,.18);
+    --glass:linear-gradient(180deg,rgba(60,14,96,.42),rgba(18,4,40,.58));
+    --pulse:0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);
+    background:#0b0418;overflow-x:hidden;min-height:100vh;min-height:100svh;
+    display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;
+  }
+  button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+  /* ---------- Scene ---------- */
+  .scene{position:fixed;inset:0;z-index:-4;overflow:hidden}
+  .scene svg{width:100%;height:100%;display:block}
+  .tw{animation:twinkle 3.6s ease-in-out infinite}
+  @keyframes twinkle{50%{opacity:.1}}
+  .cloud{animation:drift 90s linear infinite alternate}
+  .cloud.c2{animation-duration:120s;animation-direction:alternate-reverse}
+  @keyframes drift{to{transform:translateX(160px)}}
+  .sun-glow{transform-box:fill-box;transform-origin:center;transform:scale(calc(1 + var(--pulse) * .14));opacity:calc(.7 + var(--pulse) * .3);transition:transform .08s linear}
+  .shim{transform-box:fill-box;transform-origin:center;animation:shim 3.2s ease-in-out infinite}
+  @keyframes shim{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.82) translateX(6px)}}
+  .sparkle{animation:twinkle 2.4s ease-in-out infinite}
+
+  .palm{position:fixed;bottom:-1vh;z-index:-3;fill:#0c0418;transform-origin:50% 100%;
+    --h:min(84vh,780px);height:var(--h);width:calc(var(--h) * .5238);
+    animation:sway 7s ease-in-out infinite alternate}
+  .palm.l1{left:calc(var(--h) * -.16)}
+  .palm.l2{left:calc(var(--h) * .2);--h:min(58vh,540px);animation-delay:-3s;fill:#1a0830}
+  .palm.r1{right:calc(var(--h) * -.18);animation-delay:-1.5s}
+  .palm.r2{right:calc(var(--h) * .22);--h:min(50vh,470px);animation-delay:-4.5s;fill:#1a0830}
+  @keyframes sway{from{transform:rotate(-1.3deg)}to{transform:rotate(1.5deg)}}
+
+  .photo{position:fixed;inset:0;z-index:-4;background:center/cover no-repeat;display:none}
+  body.has-photo .photo{display:block}
+  body.has-photo .scene, body.has-photo .palm{display:none}
+
+  .shade{position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 62%, rgba(12,3,28,.28), transparent 75%),
+      linear-gradient(to bottom, rgba(8,2,20,.6), transparent 28%, transparent 62%, rgba(6,1,16,.78));}
+  .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.08;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* ---------- Top bar ---------- */
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:max(16px,env(safe-area-inset-top)) max(16px,3vw) 0}
+  .badge{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;
+    background:rgba(10,4,26,.45);border:1px solid var(--line);backdrop-filter:blur(10px);
+    font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .ps{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:#0070d1;font-size:.62rem;font-weight:700;letter-spacing:0}
+  .flag{font-size:1rem;line-height:1}
+
+  .audio{display:flex;align-items:center;gap:10px}
+  .music{position:relative;display:inline-flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:999px;
+    background:linear-gradient(90deg,rgba(255,62,165,.85),rgba(255,159,67,.85));font-weight:600;font-size:.86rem;
+    box-shadow:0 8px 30px -8px rgba(255,62,165,.7);transition:transform .2s, box-shadow .2s}
+  .music:hover{transform:translateY(-1px);box-shadow:0 12px 34px -8px rgba(255,62,165,.9)}
+  .music:focus-visible,.btn:focus-visible,.vol:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .music:not(.on)::after{content:"";position:absolute;inset:-4px;border-radius:999px;border:2px solid rgba(255,120,190,.7);animation:ring 2.2s ease-out infinite}
+  @keyframes ring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
+  .eq{display:inline-flex;align-items:flex-end;gap:2px;height:16px;width:22px}
+  .eq i{flex:1;background:#fff;border-radius:2px;height:100%;transform-origin:bottom;transform:scaleY(.25);transition:transform .08s linear}
+  .vol{width:90px;accent-color:var(--pink);opacity:.85}
+
+  /* ---------- Hero ---------- */
+  .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:clamp(20px,4vh,48px) 16px clamp(24px,4vh,40px);gap:clamp(12px,2.2vh,22px)}
+  .script{font-family:Satisfy,cursive;font-size:clamp(1.4rem,3.4vw,2.2rem);color:#ffc0dd;
+    text-shadow:0 0 18px rgba(255,62,165,.8);transform:rotate(-4deg);margin-bottom:-.3em}
+  h1{display:flex;flex-direction:column;align-items:center;line-height:.9;cursor:pointer;user-select:none}
+  .gta{font-weight:700;font-size:clamp(.78rem,1.8vw,1.05rem);letter-spacing:.55em;text-indent:.55em;text-transform:uppercase;color:#fff;
+    text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .vi{font-family:Anton,Impact,sans-serif;font-size:clamp(6.5rem,24vw,13.5rem);letter-spacing:.02em;
+    background:linear-gradient(180deg,#fff 8%,#ffe1ef 35%,#ff6fb6 70%,#ff8a3d 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 6px 0 rgba(40,6,60,.75)) drop-shadow(0 0 38px rgba(255,62,165,.55));
+    padding:0 .05em}
+  .sub{font-size:clamp(.95rem,2vw,1.15rem);color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(40,6,60,.9),0 0 18px rgba(40,6,60,.7)}
+  .sub strong{color:#fff}
+
+  .countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.8vw,18px);width:min(760px,100%)}
+  .unit{position:relative;background:var(--glass);border:1px solid var(--line);border-radius:clamp(12px,2vw,20px);
+    padding:clamp(12px,2.4vw,22px) 4px clamp(10px,2vw,16px);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
+    box-shadow:0 24px 50px -24px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.25);overflow:hidden}
+  .unit::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.25)}
+  .num{display:block;font-family:Anton,Impact,sans-serif;font-size:clamp(2.5rem,9vw,5.6rem);line-height:1.05;
+    background:linear-gradient(180deg,#fff 30%,#ffc4e1);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .num.flip{animation:flip .55s cubic-bezier(.2,.8,.2,1)}
+  @keyframes flip{from{transform:translateY(-30%);opacity:0;filter:blur(5px)}to{transform:none;opacity:1;filter:none}}
+  .lbl{display:block;margin-top:.45em;font-size:clamp(.6rem,1.4vw,.78rem);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  body.final .unit{animation:glow 1.6s ease-in-out infinite}
+  @keyframes glow{50%{border-color:rgba(255,62,165,.85);box-shadow:0 0 34px -4px rgba(255,62,165,.75), inset 0 1px 0 rgba(255,255,255,.25)}}
+
+  .outnow{display:none;flex-direction:column;align-items:center;gap:6px}
+  .outnow b{font-family:Anton,Impact,sans-serif;font-size:clamp(3.5rem,13vw,8rem);line-height:1;letter-spacing:.03em;
+    background:linear-gradient(90deg,var(--sun),var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 30px rgba(255,62,165,.6))}
+  body.released .countdown{display:none}
+  body.released .outnow{display:flex}
+
+  .when{font-weight:600;font-size:clamp(.95rem,2vw,1.1rem);text-shadow:0 2px 10px rgba(0,0,0,.6)}
+  .when span{color:#ffb4d7}
+
+  .zones{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;width:min(760px,100%)}
+  .zone{padding:10px 6px;border-radius:12px;background:rgba(10,4,26,.42);border:1px solid rgba(255,255,255,.1);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:2px;transition:border-color .3s}
+  .zone b{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .zone span{font-weight:700;font-size:1rem}
+  .zone small{font-size:.7rem;color:var(--muted)}
+  .zone.you{border-color:var(--pink);background:rgba(255,62,165,.18)}
+  .zone.you b{color:#fff}
+  .local{font-size:.85rem;color:var(--muted);min-height:1.2em}
+  .local strong{color:#fff;font-weight:600}
+
+  .progress{width:min(760px,100%);text-align:left}
+  .ptop{display:flex;justify-content:space-between;gap:12px;font-size:.75rem;letter-spacing:.06em;color:var(--muted);margin-bottom:7px}
+  .ptop span:last-child{font-variant-numeric:tabular-nums;color:#fff;font-weight:600}
+  .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+  .fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--violet),var(--pink),var(--orange),var(--sun));
+    box-shadow:0 0 16px rgba(255,62,165,.8);position:relative}
+  .fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    background-size:40% 100%;background-repeat:no-repeat;animation:sheen 2.6s ease-in-out infinite}
+  @keyframes sheen{from{background-position:-60% 0}to{background-position:160% 0}}
+
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .btn{padding:11px 20px;border-radius:999px;font-weight:600;font-size:.9rem;background:#fff;color:#1a0730;transition:transform .2s, background .2s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.ghost{background:rgba(10,4,26,.45);color:#fff;border:1px solid var(--line);backdrop-filter:blur(8px)}
+  .btn.ghost:hover{background:rgba(255,255,255,.12)}
+
+  footer{padding:0 16px max(18px,env(safe-area-inset-bottom));text-align:center;font-size:.72rem;line-height:1.55;color:rgba(255,255,255,.55);max-width:780px;margin:0 auto}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+    background:#fff;color:#1a0730;padding:10px 18px;border-radius:999px;font-weight:600;font-size:.88rem;transition:.3s;z-index:10}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  #fx{position:fixed;inset:0;pointer-events:none;z-index:9}
+
+  /* Stream mode (?stream): clean output for OBS / YouTube Live */
+  body.stream{cursor:none}
+  body.stream .audio, body.stream .actions, body.stream .local{display:none}
+
+  @media (max-width:640px){
+    .zones{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .vol{width:70px}
+    .badge{font-size:.7rem}
+    .palm{--h:min(60vh,520px)}
+    .palm.l2,.palm.r2{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- Original artwork: drawn in SVG, no copyrighted imagery. Drop your own royalty-free photo next to this file as bg.jpg to use it instead. -->
+<div class="photo" id="photo" aria-hidden="true"></div>
+<div class="scene" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b0224"/>
+        <stop offset=".32" stop-color="#2e0a52"/>
+        <stop offset=".58" stop-color="#8f1d6e"/>
+        <stop offset=".78" stop-color="#ff5a6a"/>
+        <stop offset=".93" stop-color="#ffab5c"/>
+        <stop offset="1" stop-color="#ffc977"/>
+      </linearGradient>
+      <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff5b0"/>
+        <stop offset=".42" stop-color="#ffb347"/>
+        <stop offset=".8" stop-color="#ff4d7e"/>
+        <stop offset="1" stop-color="#ff2f86"/>
+      </linearGradient>
+      <radialGradient id="glow">
+        <stop offset="0" stop-color="#ff7ab0" stop-opacity=".75"/>
+        <stop offset=".45" stop-color="#ff4f9a" stop-opacity=".3"/>
+        <stop offset="1" stop-color="#ff2f86" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a1159"/>
+        <stop offset=".35" stop-color="#1b0738"/>
+        <stop offset="1" stop-color="#070119"/>
+      </linearGradient>
+      <linearGradient id="reflGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ff8fb8" stop-opacity="0"/>
+        <stop offset=".3" stop-color="#ff6fa8"/>
+        <stop offset=".5" stop-color="#ffd38a"/>
+        <stop offset=".7" stop-color="#ff6fa8"/>
+        <stop offset="1" stop-color="#ff8fb8" stop-opacity="0"/>
+      </linearGradient>
+      <mask id="sunMask">
+        <rect width="1600" height="900" fill="#fff"/>
+        <g fill="#000">
+          <rect x="500" y="446" width="600" height="4"/>
+          <rect x="500" y="469" width="600" height="6"/>
+          <rect x="500" y="491" width="600" height="8"/>
+          <rect x="500" y="513" width="600" height="10"/>
+          <rect x="500" y="535" width="600" height="12"/>
+          <rect x="500" y="558" width="600" height="14"/>
+          <rect x="500" y="581" width="600" height="16"/>
+        </g>
+      </mask>
+      <symbol id="palm" viewBox="0 0 220 420">
+        <path d="M96 420C100 330 92 240 112 128L121 130C106 240 114 330 112 420Z"/>
+        <path d="M116 122Q60 92 4 140Q58 106 116 130Z"/>
+        <path d="M116 122Q176 88 218 138Q172 104 116 130Z"/>
+        <path d="M116 122Q80 60 30 52Q84 78 114 128Z"/>
+        <path d="M116 122Q156 56 204 62Q150 80 118 128Z"/>
+        <path d="M116 124Q74 132 52 204Q84 146 116 132Z"/>
+        <path d="M116 124Q164 134 180 200Q150 146 116 132Z"/>
+        <path d="M116 122Q112 64 132 22Q124 70 120 124Z"/>
+        <circle cx="110" cy="134" r="6"/><circle cx="122" cy="136" r="6"/><circle cx="116" cy="142" r="5.5"/>
+      </symbol>
+    </defs>
+
+    <rect width="1600" height="600" fill="url(#sky)"/>
+    <g id="stars"></g>
+    <g fill="#ff8fc0" opacity=".32">
+      <ellipse class="cloud" cx="330" cy="250" rx="260" ry="9"/>
+      <ellipse class="cloud" cx="420" cy="272" rx="170" ry="6"/>
+      <ellipse class="cloud c2" cx="1220" cy="220" rx="300" ry="10"/>
+      <ellipse class="cloud c2" cx="1140" cy="244" rx="190" ry="6"/>
+      <ellipse class="cloud" cx="980" cy="330" rx="220" ry="7" opacity=".7"/>
+    </g>
+    <circle class="sun-glow" cx="800" cy="500" r="420" fill="url(#glow)"/>
+    <circle cx="800" cy="500" r="240" fill="url(#sunGrad)" mask="url(#sunMask)"/>
+    <g id="far"></g>
+    <g id="near"></g>
+    <g id="windows"></g>
+    <rect y="600" width="1600" height="300" fill="url(#sea)"/>
+    <rect y="598" width="1600" height="3" fill="#ffb0d0" opacity=".55"/>
+    <g id="refl"></g>
+    <g id="sparkles"></g>
+  </svg>
+</div>
+<svg class="palm l1" viewBox="0 0 220 420" aria-hidden="true"><use href="#palm"/></svg>
+<svg class="palm l2" viewBox="0 0 220 420" aria-hidden="true"><use href="#palm"/></svg>
+<svg class="palm r1" viewBox="0 0 220 420" aria-hidden="true"><g transform="translate(220 0) scale(-1 1)"><use href="#palm"/></g></svg>
+<svg class="palm r2" viewBox="0 0 220 420" aria-hidden="true"><g transform="translate(220 0) scale(-1 1)"><use href="#palm"/></g></svg>
+<div class="shade"></div>
+<div class="grain"></div>
+<canvas id="fx"></canvas>
+
+<header class="top">
+  <div class="badge"><span class="ps">PS5</span> US PlayStation Store</div>
+  <div class="audio">
+    <button id="musicBtn" class="music" aria-pressed="false" title="Toggle soundtrack (M)">
+      <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span id="musicLabel">Play soundtrack</span>
+    </button>
+    <input id="vol" class="vol" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="Volume">
+  </div>
+</header>
+
+<main class="hero">
+  <p class="script">Welcome to Leonida</p>
+  <h1 id="logo" title="Click me"><span class="gta">Grand Theft Auto</span><span class="vi">VI</span></h1>
+  <p class="sub" id="sub">Unlocks on <strong>US PS5 accounts</strong> in</p>
+
+  <div class="countdown" role="timer" aria-label="Time remaining">
+    <div class="unit"><span class="num" id="d">00</span><span class="lbl">Days</span></div>
+    <div class="unit"><span class="num" id="h">00</span><span class="lbl">Hours</span></div>
+    <div class="unit"><span class="num" id="m">00</span><span class="lbl">Minutes</span></div>
+    <div class="unit"><span class="num" id="s">00</span><span class="lbl">Seconds</span></div>
+  </div>
+  <div class="outnow"><b>OUT NOW</b><span class="sub">Fire up your PS5 — Leonida is open.</span></div>
+
+  <p class="when" id="when"></p>
+  <div class="zones" id="zones"></div>
+  <p class="local" id="local"></p>
+
+  <div class="progress">
+    <div class="ptop"><span>Since Trailer 1 · Dec 4, 2023</span><span id="pct">0%</span></div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+  </div>
+
+  <div class="actions">
+    <button id="icsBtn" class="btn">Add to calendar</button>
+    <button id="shareBtn" class="btn ghost">Share countdown</button>
+  </div>
+</main>
+
+<footer>
+  Fan-made countdown. Not affiliated with Rockstar Games, Take-Two Interactive or Sony Interactive Entertainment.
+  Unlock time is based on the US PlayStation Store listing (05:00 UTC, Nov 19, 2026); check the store for final timing.
+  The artwork and synthwave soundtrack are original and generated in your browser, with no copyrighted audio or images.
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===================== CONFIG ===================== */
+const UNLOCK = Date.UTC(2026, 10, 19, 5, 0, 0);    // Nov 19 2026, 05:00 UTC = 12:00 AM ET (US PS Store)
+const TRAILER1 = Date.UTC(2023, 11, 4, 23, 0, 0);  // Dec 4 2023, 6 PM ET
+const ZONES = [
+  ['ET', 'America/New_York'], ['CT', 'America/Chicago'], ['MT', 'America/Denver'],
+  ['PT', 'America/Los_Angeles'], ['AKT', 'America/Anchorage'], ['HT', 'Pacific/Honolulu'],
+];
+
+/* ===================== Scene ===================== */
+(function buildScene() {
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  let seed = 20261119;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const $ = id => document.getElementById(id);
+
+  for (let i = 0; i < 150; i++) {
+    const c = mk('circle', { cx: (rnd() * 1600).toFixed(1), cy: (rnd() * 360).toFixed(1), r: (rnd() * 1.3 + .3).toFixed(2), fill: '#fff', opacity: (rnd() * .7 + .2).toFixed(2) }, $('stars'));
+    if (i % 4 === 0) { c.classList.add('tw'); c.style.animationDelay = (rnd() * 4).toFixed(2) + 's'; }
+  }
+
+  function city(group, minH, maxH, color, lit) {
+    let x = -10;
+    while (x < 1610) {
+      const w = 22 + rnd() * 56;
+      const d = Math.min(1, Math.abs(x + w / 2 - 800) / 760);
+      const h = minH + (maxH - minH) * Math.pow(d, .9) * (.5 + rnd() * .5);
+      mk('rect', { x: x.toFixed(1), y: (600 - h).toFixed(1), width: w.toFixed(1), height: h.toFixed(1), fill: color }, group);
+      if (h > 120 && rnd() < .2) mk('rect', { x: (x + w / 2 - 1).toFixed(1), y: (600 - h - 24).toFixed(1), width: 2, height: 24, fill: color }, group);
+      if (lit) {
+        for (let wy = 600 - h + 8; wy < 590; wy += 11)
+          for (let wx = x + 5; wx < x + w - 6; wx += 9)
+            if (rnd() < .15) mk('rect', { x: wx.toFixed(1), y: wy.toFixed(1), width: 3.5, height: 5, fill: rnd() < .7 ? '#ffd08a' : '#7fe7ff', opacity: (.45 + rnd() * .5).toFixed(2) }, $('windows'));
+      }
+      x += w + (rnd() < .3 ? rnd() * 8 : 0);
+    }
+  }
+  city($('far'), 26, 280, '#4b1766', false);
+  city($('near'), 10, 200, '#1c0733', true);
+
+  for (let i = 0; i < 16; i++) {
+    const y = 606 + i * i * .9 + i * 5, w = 440 - i * 20 + rnd() * 30;
+    const r = mk('rect', { x: (800 - w / 2).toFixed(1), y: y.toFixed(1), width: w.toFixed(1), height: (2 + i * .35).toFixed(1), rx: 2, fill: 'url(#reflGrad)', opacity: (.85 - i * .045).toFixed(2) }, $('refl'));
+    r.classList.add('shim'); r.style.animationDelay = (-rnd() * 3).toFixed(2) + 's';
+  }
+  for (let i = 0; i < 60; i++) {
+    const r = mk('rect', { x: (rnd() * 1600).toFixed(1), y: (612 + rnd() * 280).toFixed(1), width: (8 + rnd() * 40).toFixed(1), height: 1.5, fill: rnd() < .5 ? '#7fe7ff' : '#ff9fcb', opacity: (.15 + rnd() * .35).toFixed(2) }, $('sparkles'));
+    r.classList.add('sparkle'); r.style.animationDelay = (rnd() * 3).toFixed(2) + 's';
+  }
+
+  // Optional: if a bg.jpg sits next to this file, use it as the background photo.
+  const img = new Image();
+  img.onload = () => { $('photo').style.backgroundImage = 'linear-gradient(rgba(20,4,40,.25),rgba(20,4,40,.25)), url(bg.jpg)'; document.body.classList.add('has-photo'); };
+  img.src = 'bg.jpg';
+})();
+
+/* ===================== Countdown ===================== */
+const el = id => document.getElementById(id);
+const nums = { d: el('d'), h: el('h'), m: el('m'), s: el('s') };
+const last = {};
+const pad2 = n => String(n).padStart(2, '0');
+
+function setNum(k, v) {
+  if (last[k] === v) return;
+  last[k] = v;
+  const n = nums[k];
+  n.textContent = v;
+  n.classList.remove('flip'); void n.offsetWidth; n.classList.add('flip');
+}
+
+let celebrated = false;
+function tick() {
+  const now = Date.now();
+  const diff = Math.max(0, UNLOCK - now);
+  const d = Math.floor(diff / 864e5), h = Math.floor(diff / 36e5) % 24, m = Math.floor(diff / 6e4) % 60, s = Math.floor(diff / 1e3) % 60;
+  setNum('d', pad2(d)); setNum('h', pad2(h)); setNum('m', pad2(m)); setNum('s', pad2(s));
+  document.body.classList.toggle('final', diff > 0 && diff < 864e5);
+
+  const pct = Math.min(100, Math.max(0, (now - TRAILER1) / (UNLOCK - TRAILER1) * 100));
+  el('fill').style.width = pct + '%';
+  el('pct').textContent = pct.toFixed(5) + '%';
+
+  if (diff === 0) {
+    document.body.classList.add('released');
+    el('sub').innerHTML = 'Now available on <strong>US PS5 accounts</strong>';
+    document.title = 'GTA VI is OUT NOW';
+    if (!celebrated) { celebrated = true; confetti(260); }
+  } else {
+    document.title = `${d}d ${pad2(h)}:${pad2(m)}:${pad2(s)} · GTA VI Countdown`;
+  }
+}
+
+(function zones() {
+  const fmt = (tz, o) => new Intl.DateTimeFormat('en-US', { timeZone: tz, ...o }).format(UNLOCK);
+  const T = { hour: 'numeric', minute: '2-digit' }, D = { weekday: 'short', month: 'short', day: 'numeric' };
+  el('when').innerHTML = `${fmt('America/New_York', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} · <span>${fmt('America/New_York', T)} ET</span>`;
+
+  let userTz = 'UTC';
+  try { userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) {}
+  const userStamp = fmt(userTz, { ...D, ...T });
+  let matched = false;
+  el('zones').innerHTML = ZONES.map(([abbr, tz]) => {
+    const you = fmt(tz, { ...D, ...T }) === userStamp;
+    matched = matched || you;
+    return `<div class="zone${you ? ' you' : ''}"><b>${abbr}${you ? ' · You' : ''}</b><span>${fmt(tz, T)}</span><small>${fmt(tz, D)}</small></div>`;
+  }).join('');
+  el('local').innerHTML = matched
+    ? 'Same instant nationwide: one unlock for every US account.'
+    : `Your time (${userTz.replace(/_/g, ' ')}): <strong>${fmt(userTz, D)} · ${fmt(userTz, T)}</strong>`;
+})();
+
+tick();
+setInterval(tick, 250);
+
+/* ===================== Soundtrack (original, Web Audio synthwave) ===================== */
+const Music = (() => {
+  const BPM = 98, S16 = 60 / BPM / 4;
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  // Am – F – C – G
+  const PROG = [
+    { bass: 45, pad: [57, 60, 64], arp: [69, 72, 76, 81] },
+    { bass: 41, pad: [53, 57, 60], arp: [65, 69, 72, 77] },
+    { bass: 48, pad: [55, 60, 64], arp: [67, 72, 76, 79] },
+    { bass: 43, pad: [55, 59, 62], arp: [67, 71, 74, 79] },
+  ];
+  const MEL = [
+    [[0, 76, 6], [6, 74, 2], [8, 72, 4], [12, 71, 4]],
+    [[0, 72, 6], [6, 69, 2], [8, 72, 4], [12, 77, 4]],
+    [[0, 76, 6], [6, 79, 2], [8, 76, 4], [12, 72, 4]],
+    [[0, 74, 8], [8, 71, 4], [12, 67, 4]],
+  ];
+  const ARP = [0, 1, 2, 3, 2, 1, 2, 3, 0, 2, 1, 3, 2, 1, 3, 2];
+
+  let ctx, out, bus, padBus, revSend, dlySend, noise, analyser, data, timer, step = 0, next = 0, on = false, vol = .7;
+
+  function impulse(sec, decay) {
+    const len = ctx.sampleRate * sec, b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay); }
+    return b;
+  }
+  function build() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    out = ctx.createGain(); out.gain.value = 0;
+    bus = ctx.createGain(); bus.gain.value = .8;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.knee.value = 12; comp.ratio.value = 3.5; comp.attack.value = .01; comp.release.value = .2;
+    analyser = ctx.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = .78;
+    data = new Uint8Array(analyser.frequencyBinCount);
+    bus.connect(comp); comp.connect(out); out.connect(analyser); analyser.connect(ctx.destination);
+
+    const rev = ctx.createConvolver(); rev.buffer = impulse(3, 2.2);
+    revSend = ctx.createGain(); revSend.gain.value = .5;
+    const revOut = ctx.createGain(); revOut.gain.value = .55;
+    revSend.connect(rev); rev.connect(revOut); revOut.connect(bus);
+
+    const dly = ctx.createDelay(2); dly.delayTime.value = S16 * 3;
+    const fb = ctx.createGain(); fb.gain.value = .38;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+    dlySend = ctx.createGain(); dlySend.gain.value = .3;
+    dlySend.connect(dly); dly.connect(lp); lp.connect(fb); fb.connect(dly); lp.connect(bus); lp.connect(revSend);
+
+    padBus = ctx.createGain(); padBus.connect(bus); padBus.connect(revSend);
+
+    noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const nd = noise.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  }
+
+  function kick(t) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + .11);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(1, t + .004); g.gain.exponentialRampToValueAtTime(.001, t + .42);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + .45);
+    padBus.gain.setValueAtTime(.4, t); padBus.gain.linearRampToValueAtTime(1, t + S16 * 3.5); // sidechain pump
+  }
+  function snare(t, lvl = .55) {
+    const n = ctx.createBufferSource(); n.buffer = noise;
+    const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 1400;
+    const g = ctx.createGain(); g.gain.setValueAtTime(lvl, t); g.gain.exponentialRampToValueAtTime(.001, t + .22);
+    n.connect(f); f.connect(g); g.connect(bus); g.connect(revSend); n.start(t, Math.random() * .5); n.stop(t + .25);
+    const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'triangle';
+    o.frequency.setValueAtTime(220, t); o.frequency.exponentialRampToValueAtTime(140, t + .08);
+    og.gain.setValueAtTime(lvl * .6, t); og.gain.exponentialRampToValueAtTime(.001, t + .12);
+    o.connect(og); og.connect(bus); o.start(t); o.stop(t + .14);
+  }
+  function hat(t, open, lvl) {
+    const n = ctx.createBufferSource(); n.buffer = noise;
+    const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 8000;
+    const g = ctx.createGain(), len = open ? .22 : .045;
+    g.gain.setValueAtTime(lvl, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
+    n.connect(f); f.connect(g); g.connect(bus); n.start(t, Math.random() * .5); n.stop(t + len + .02);
+  }
+  function bass(t, m, dur) {
+    const o = ctx.createOscillator(), s = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth'; o.frequency.value = hz(m); s.frequency.value = hz(m);
+    f.type = 'lowpass'; f.Q.value = 6; f.frequency.setValueAtTime(1100, t); f.frequency.exponentialRampToValueAtTime(180, t + dur);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.3, t + .008); g.gain.exponentialRampToValueAtTime(.001, t + dur + .05);
+    o.connect(f); f.connect(g); s.connect(g); g.connect(bus);
+    o.start(t); s.start(t); o.stop(t + dur + .1); s.stop(t + dur + .1);
+  }
+  function pad(t, notes, dur) {
+    const f = ctx.createBiquadFilter(), g = ctx.createGain();
+    f.type = 'lowpass'; f.frequency.setValueAtTime(700, t); f.frequency.linearRampToValueAtTime(1800, t + dur * .6); f.frequency.linearRampToValueAtTime(900, t + dur);
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.08, t + .5); g.gain.setValueAtTime(.08, t + dur - .1); g.gain.linearRampToValueAtTime(.0001, t + dur + .8);
+    f.connect(g); g.connect(padBus);
+    notes.forEach(m => [-9, 9].forEach(dt => {
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz(m); o.detune.value = dt;
+      o.connect(f); o.start(t); o.stop(t + dur + .9);
+    }));
+  }
+  function arp(t, m, lvl) {
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'square'; o.frequency.value = hz(m);
+    f.type = 'lowpass'; f.frequency.value = 2600; f.Q.value = 2;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(lvl, t + .005); g.gain.exponentialRampToValueAtTime(.001, t + .2);
+    o.connect(f); f.connect(g); g.connect(bus); g.connect(dlySend); o.start(t); o.stop(t + .22);
+  }
+  function lead(t, m, dur) {
+    const o = ctx.createOscillator(), lfo = ctx.createOscillator(), lg = ctx.createGain(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth'; o.frequency.value = hz(m);
+    lfo.frequency.value = 5.5; lg.gain.value = 14; lfo.connect(lg); lg.connect(o.detune);
+    f.type = 'lowpass'; f.frequency.value = 1900; f.Q.value = 1;
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.075, t + .03); g.gain.setValueAtTime(.075, t + dur - .05); g.gain.linearRampToValueAtTime(.0001, t + dur + .15);
+    o.connect(f); f.connect(g); g.connect(bus); g.connect(dlySend); g.connect(revSend);
+    o.start(t); lfo.start(t); o.stop(t + dur + .2); lfo.stop(t + dur + .2);
+  }
+
+  // 16-bar arrangement: intro (pad) → arp → full groove → groove + lead
+  function playStep(n, t) {
+    const st = n % 16, barN = Math.floor(n / 16), sec = barN % 16, ch = PROG[barN % 4];
+    const full = sec >= 4;
+    if (st === 0) pad(t, ch.pad, S16 * 16);
+    if (sec >= 2) arp(t, ch.arp[ARP[st]], full ? .06 : .045);
+    if (full) {
+      if (st % 4 === 0) kick(t);
+      if (st === 4 || st === 12) snare(t);
+      if (sec === 15 && st >= 13) snare(t, .2 + (st - 12) * .1);
+      if (st % 2 === 0) hat(t, st % 4 === 2, st % 4 === 2 ? .1 : .05);
+      if (st % 2 === 0) bass(t, ch.bass + (st % 4 === 2 ? 12 : 0), S16 * 1.8);
+    } else if (st === 0) {
+      bass(t, ch.bass, S16 * 15);
+    }
+    if (sec >= 8) MEL[barN % 4].forEach(([at, m, len]) => { if (at === st) lead(t, m, S16 * len); });
+  }
+  function schedule() {
+    const ahead = document.hidden ? 1.5 : .15; // background tabs throttle timers
+    while (next < ctx.currentTime + ahead) { playStep(step, next); next += S16; step++; }
+  }
+
+  return {
+    get on() { return on; },
+    async start() {
+      if (!ctx) build();
+      await ctx.resume();
+      const t = ctx.currentTime;
+      clearInterval(timer);
+      step = 0; next = t + .08;
+      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(vol, t + 1.2);
+      timer = setInterval(schedule, 25); schedule();
+      on = true;
+    },
+    stop() {
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(0, t + .4);
+      on = false;
+      setTimeout(() => { if (!on) { clearInterval(timer); ctx.suspend(); } }, 500);
+    },
+    volume(v) { vol = v; if (on && ctx) out.gain.setTargetAtTime(v, ctx.currentTime, .05); },
+    levels() { if (!analyser || !on) return null; analyser.getByteFrequencyData(data); return data; },
+  };
+})();
+
+const musicBtn = el('musicBtn'), vol = el('vol'), bars = [...document.querySelectorAll('.eq i')];
+try { const v = localStorage.getItem('gta6-vol'); if (v !== null) vol.value = v; } catch (e) {}
+Music.volume(+vol.value);
+vol.addEventListener('input', () => { Music.volume(+vol.value); try { localStorage.setItem('gta6-vol', vol.value); } catch (e) {} });
+
+async function toggleMusic() {
+  if (Music.on) Music.stop(); else await Music.start();
+  musicBtn.classList.toggle('on', Music.on);
+  musicBtn.setAttribute('aria-pressed', Music.on);
+  el('musicLabel').textContent = Music.on ? 'Pause soundtrack' : 'Play soundtrack';
+}
+musicBtn.addEventListener('click', toggleMusic);
+document.addEventListener('keydown', e => { if (e.key.toLowerCase() === 'm' && !e.target.closest('input')) toggleMusic(); });
+
+// Stream mode: add ?stream to the URL (e.g. for an OBS browser source). Add &mute to keep it silent.
+const params = new URLSearchParams(location.search);
+if (params.has('stream')) {
+  document.body.classList.add('stream');
+  if (params.has('vol')) { vol.value = Math.min(1, Math.max(0, +params.get('vol') || 0)); Music.volume(+vol.value); }
+  if (!params.has('mute')) {
+    toggleMusic(); // OBS allows autoplay; normal browsers may need one click
+    addEventListener('pointerdown', () => { if (!Music.on) toggleMusic(); }, { once: true });
+  }
+}
+
+const root = document.documentElement, BIN = [2, 5, 9, 15, 24];
+(function viz() {
+  const d = Music.levels();
+  if (d) {
+    bars.forEach((b, i) => b.style.transform = `scaleY(${Math.max(.15, d[BIN[i]] / 255).toFixed(2)})`);
+    const low = (d[1] + d[2] + d[3]) / 765;
+    root.style.setProperty('--pulse', Math.max(0, (low - .45) * 1.8).toFixed(3));
+  } else {
+    bars.forEach(b => b.style.transform = 'scaleY(.25)');
+    root.style.setProperty('--pulse', 0);
+  }
+  requestAnimationFrame(viz);
+})();
+
+/* ===================== Actions ===================== */
+function toast(msg) { const t = el('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.id); toast.id = setTimeout(() => t.classList.remove('show'), 2200); }
+
+el('icsBtn').addEventListener('click', () => {
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//GTA VI Fan Countdown//EN', 'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT', 'UID:gta6-us-ps5-unlock-20261119@fan-countdown', 'DTSTAMP:' + stamp,
+    'DTSTART:20261119T050000Z', 'DTEND:20261119T060000Z',
+    'SUMMARY:GTA VI unlocks on US PS5', 'DESCRIPTION:GTA VI unlocks on US PlayStation Store accounts (12:00 AM ET).',
+    'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:GTA VI unlocks in 30 minutes', 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = 'gta6-ps5-us-unlock.ics';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('Calendar event downloaded');
+});
+
+el('shareBtn').addEventListener('click', async () => {
+  const text = `GTA VI unlocks on US PS5 in ${el('d').textContent}d ${el('h').textContent}h ${el('m').textContent}m 🌴`;
+  try {
+    if (navigator.share) { await navigator.share({ title: 'GTA VI Countdown', text, url: location.href }); return; }
+    await navigator.clipboard.writeText(`${text} ${location.href}`);
+    toast('Copied to clipboard');
+  } catch (e) { if (e.name !== 'AbortError') toast('Could not share'); }
+});
+
+/* ===================== Confetti ===================== */
+function confetti(n = 160) {
+  const cv = el('fx'), c = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cols = ['#ff3ea5', '#ff9f43', '#ffd36b', '#3ee0ff', '#7b2cff', '#ffffff'];
+  const ps = Array.from({ length: n }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .32,
+    vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 4,
+    w: 6 + Math.random() * 6, h: 3 + Math.random() * 4, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
+    col: cols[Math.random() * cols.length | 0],
+  }));
+  (function frame() {
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    let alive = 0;
+    for (const p of ps) {
+      p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      if (p.y < innerHeight + 20) alive++;
+      c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.col; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore();
+    }
+    if (alive) requestAnimationFrame(frame); else c.clearRect(0, 0, innerWidth, innerHeight);
+  })();
+}
+el('logo').addEventListener('click', () => confetti(140));
+</script>
+</body>
+</html>
