@@ -114,11 +114,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5 # LHCI reads the commit hash when uploading the report
+      # An explicit config stops LHCI from auto-loading lighthouserc.json (which serves the local folder)
       - name: Audit
         id: lhci
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: ${{ env.PROD_URL }}
+          configPath: ./lighthouserc.prod.json
           temporaryPublicStorage: true
       - name: Summary
         if: always()

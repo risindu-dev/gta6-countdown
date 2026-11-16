@@ -9,6 +9,6 @@ playwright-report
 package.json
 package-lock.json
 playwright.config.js
-lighthouserc.json
+lighthouserc*.json
 .htmlvalidate.json
 README.md
